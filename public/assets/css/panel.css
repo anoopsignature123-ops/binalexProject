@@ -1,0 +1,106 @@
+:root {
+    --binalex-gold: #d6a83b;
+    --binalex-gold-light: #f0cc68;
+    --binalex-gold-deep: #966b18;
+    --binalex-ink: #080a0d;
+    --binalex-surface: #12161b;
+    --binalex-surface-raised: #181d23;
+    --binalex-line: rgba(214, 168, 59, 0.28);
+}
+
+.admin-theme,
+.user-theme {
+    background:
+        radial-gradient(circle at 86% 0%, rgba(214, 168, 59, 0.08), transparent 28rem),
+        linear-gradient(135deg, #080a0d 0%, #0d1116 52%, #080a0d 100%);
+    color: #f5f1e6;
+}
+
+.admin-theme .sidebar,
+.user-theme .sidebar {
+    background: linear-gradient(180deg, #0c1015 0%, #090b0e 100%);
+    border-right: 1px solid var(--binalex-line);
+}
+
+.admin-theme .logo-section,
+.user-theme .logo-section {
+    border-color: var(--binalex-line);
+}
+
+.admin-theme .logo-section > div:first-child,
+.user-theme .logo-section > div:first-child,
+.admin-theme .user-section > div > div:first-child,
+.user-theme .user-section > div > div:first-child {
+    background: linear-gradient(135deg, var(--binalex-gold-light), var(--binalex-gold-deep));
+    box-shadow: 0 0 22px rgba(214, 168, 59, 0.15);
+}
+
+.admin-theme .nav-item,
+.user-theme .nav-item {
+    border: 1px solid transparent;
+}
+
+.admin-theme .nav-item:hover,
+.user-theme .nav-item:hover {
+    background: rgba(214, 168, 59, 0.08);
+    border-color: rgba(214, 168, 59, 0.2);
+}
+
+.admin-theme .nav-item.active,
+.user-theme .nav-item.active {
+    background: linear-gradient(135deg, var(--binalex-gold-light), var(--binalex-gold-deep));
+    border-color: var(--binalex-gold-light);
+    color: #171208;
+    box-shadow: 0 9px 26px rgba(214, 168, 59, 0.2);
+}
+
+.admin-theme .main-content,
+.user-theme .main-content {
+    background: transparent;
+}
+
+.admin-theme .glass,
+.user-theme .glass {
+    background: rgba(10, 13, 17, 0.88);
+    border-bottom: 1px solid var(--binalex-line);
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.16);
+}
+
+.admin-theme .bg-panel,
+.user-theme .bg-panel {
+    background: linear-gradient(145deg, var(--binalex-surface-raised), var(--binalex-surface));
+    border: 1px solid var(--binalex-line);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(240, 204, 104, 0.06);
+}
+
+.admin-theme .border-border,
+.user-theme .border-border {
+    border-color: var(--binalex-line);
+}
+
+.admin-theme .bg-panel:hover,
+.user-theme .bg-panel:hover {
+    border-color: rgba(240, 204, 104, 0.72);
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.3), 0 0 28px rgba(214, 168, 59, 0.1);
+}
+
+.admin-theme .inner-content > *,
+.user-theme .inner-content > * {
+    animation: binalex-panel-enter 0.5s ease both;
+}
+
+.admin-theme .inner-content > *:nth-child(2),
+.user-theme .inner-content > *:nth-child(2) { animation-delay: 70ms; }
+
+.admin-theme .inner-content > *:nth-child(3),
+.user-theme .inner-content > *:nth-child(3) { animation-delay: 140ms; }
+
+@keyframes binalex-panel-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-theme .inner-content > *,
+    .user-theme .inner-content > * { animation: none; }
+}

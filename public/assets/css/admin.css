@@ -1,0 +1,215 @@
+.admin-theme {
+    --color-accent: #d6a83b;
+    --color-emerald-300: #f5d77d;
+    --color-emerald-400: #e6bd55;
+    --color-emerald-500: #d6a83b;
+    --color-emerald-600: #b98b22;
+    --color-emerald-700: #8f6916;
+    --color-teal-400: #f0c866;
+    --color-teal-500: #c99527;
+    --color-teal-600: #a77716;
+    --color-bg: #08090b;
+    --color-panel: #121417;
+    --color-border: #393323;
+    --color-glass: rgba(18, 20, 23, 0.94);
+}
+
+.admin-theme .bg-panel {
+    background: linear-gradient(145deg, #15171b, #101114);
+    border-color: #514326;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(214, 168, 59, 0.12);
+    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.admin-theme .border-border {
+    border-color: #514326;
+}
+
+.admin-theme .bg-panel:hover {
+    transform: translateY(-2px);
+    border-color: rgba(235, 193, 83, 0.8);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3), 0 0 28px rgba(214, 168, 59, 0.14);
+}
+
+.admin-theme .inner-content > * {
+    animation: admin-reveal 0.55s ease both;
+}
+
+.admin-theme .inner-content > *:nth-child(2) { animation-delay: 0.08s; }
+.admin-theme .inner-content > *:nth-child(3) { animation-delay: 0.16s; }
+.admin-theme .inner-content > *:nth-child(4) { animation-delay: 0.24s; }
+
+@keyframes admin-reveal {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-theme .inner-content > * { animation: none; }
+}
+
+.admin-theme .nav-item.active {
+    background: linear-gradient(135deg, #d6a83b, #a77716);
+    color: #080705;
+    box-shadow: 0 8px 22px rgba(214, 168, 59, 0.16);
+}
+
+.admin-theme .nav-item.active:hover {
+    color: #080705;
+    background: linear-gradient(135deg, #e6bd55, #b98b22);
+}
+
+.admin-theme .live-dot {
+    background: var(--color-accent);
+}
+
+.admin-theme .bg-red-500\/10 {
+    background-color: rgba(214, 168, 59, 0.1);
+}
+
+.admin-theme .text-red-500,
+.admin-theme .hover\:text-red-500:hover {
+    color: #e6bd55;
+}
+
+.admin-theme .hover\:bg-red-500\/10:hover {
+    background-color: rgba(214, 168, 59, 0.1);
+}
+
+.auth-page {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(214, 168, 59, 0.1), transparent 34rem),
+        linear-gradient(135deg, #171a20 0%, #111419 52%, #0d1014 100%);
+}
+
+.auth-page main {
+    position: relative;
+}
+
+.auth-page main::before,
+.auth-page main::after {
+    content: '';
+    position: absolute;
+    width: 230px;
+    height: 230px;
+    border: 1px solid rgba(214, 168, 59, 0.12);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.auth-page main::before {
+    top: 7%;
+    left: 9%;
+}
+
+.auth-page main::after {
+    right: 9%;
+    bottom: 7%;
+    width: 170px;
+    height: 170px;
+}
+
+.auth-page .bg-panel {
+    background: linear-gradient(145deg, #20242a, #171a1f);
+    border-color: rgba(214, 168, 59, 0.34);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.auth-page input {
+    background-color: #0f1216;
+    border-color: #4a402c;
+}
+
+.auth-page input:focus {
+    border-color: #e6bd55;
+    box-shadow: 0 0 0 3px rgba(214, 168, 59, 0.14);
+}
+
+.auth-page .bg-gradient-to-r {
+    background-image: linear-gradient(135deg, #e0b84f, #b98218);
+    color: #17130a;
+}
+
+.user-theme {
+    --color-accent: #d6a83b;
+    --color-emerald-300: #f5d77d;
+    --color-emerald-400: #e6bd55;
+    --color-emerald-500: #d6a83b;
+    --color-emerald-600: #b98b22;
+    --color-emerald-700: #8f6916;
+    --color-teal-400: #f0c866;
+    --color-teal-500: #c99527;
+    --color-teal-600: #a77716;
+    --color-bg: #08090b;
+    --color-panel: #121417;
+    --color-border: #393323;
+    --color-glass: rgba(18, 20, 23, 0.94);
+}
+
+.user-theme .bg-panel {
+    background: linear-gradient(145deg, #15171b, #101114);
+    border-color: #514326;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(214, 168, 59, 0.12);
+    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.user-theme .bg-panel:hover {
+    transform: translateY(-2px);
+    border-color: rgba(235, 193, 83, 0.8);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3), 0 0 28px rgba(214, 168, 59, 0.14);
+}
+
+.user-theme .border-border { border-color: #514326; }
+.user-theme .nav-item.active {
+    background: linear-gradient(135deg, #d6a83b, #a77716);
+    color: #080705;
+    box-shadow: 0 8px 22px rgba(214, 168, 59, 0.16);
+}
+
+.user-theme .nav-item.active:hover { color: #080705; background: linear-gradient(135deg, #e6bd55, #b98b22); }
+.user-theme .live-dot { background: var(--color-accent); }
+
+.user-theme.auth-page {
+    --color-bg: #f4f6f8;
+    --color-panel: #ffffff;
+    --color-border: #dfe4e8;
+    --color-text: #17212b;
+    --color-muted: #667481;
+    --color-glass: rgba(255, 255, 255, 0.94);
+    background:
+        radial-gradient(circle at 10% 12%, rgba(214, 168, 59, 0.16), transparent 18rem),
+        radial-gradient(circle at 92% 88%, rgba(214, 168, 59, 0.12), transparent 22rem),
+        #f4f6f8;
+}
+
+.user-theme.auth-page main::before,
+.user-theme.auth-page main::after {
+    border-color: rgba(184, 140, 34, 0.14);
+}
+
+.user-theme.auth-page .bg-panel {
+    background: #ffffff;
+    border-color: #d7c48f;
+    box-shadow: 0 22px 55px rgba(38, 48, 58, 0.12), 0 2px 8px rgba(38, 48, 58, 0.04);
+}
+
+.user-theme.auth-page input {
+    background-color: #fbfcfd;
+    border-color: #d9e0e5;
+    color: #17212b;
+}
+
+.user-theme.auth-page input::placeholder {
+    color: #87939d;
+}
+
+.user-theme.auth-page input:focus {
+    border-color: #c99527;
+    box-shadow: 0 0 0 3px rgba(201, 149, 39, 0.14);
+}
+
+.user-theme.auth-page .bg-gradient-to-r {
+    background-image: linear-gradient(135deg, #d9ae43, #b98218);
+    color: #fffdf6;
+    box-shadow: 0 10px 22px rgba(185, 139, 34, 0.2);
+}
