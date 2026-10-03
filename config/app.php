@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'usdt_bep20_address' => env('USDT_BEP20_ADDRESS'),
+
 ];

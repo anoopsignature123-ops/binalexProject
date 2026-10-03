@@ -14,6 +14,8 @@ class Deposit extends Model
         'user_id',
         'amount_usd',
         'payment_method',
+        'wallet_address',
+        'gateway_url',
         'transaction_hash',
         'status',
         'admin_note',

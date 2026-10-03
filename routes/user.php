@@ -32,6 +32,9 @@ Route::prefix('user')->group(function (): void {
         // Deposits
         Route::get('/deposit', [DepositController::class, 'index'])->name('user.deposit.index');
         Route::post('/deposit', [DepositController::class, 'store'])->name('user.deposit.store');
+        Route::post('/deposit/oxapay', [DepositController::class, 'createOxapayInvoice'])->name('user.deposit.oxapay');
+        Route::get('/deposit/{deposit}/payment', [DepositController::class, 'paymentView'])->name('user.deposit.payment');
+        Route::get('/deposit/{deposit}/check-status', [DepositController::class, 'checkStatus'])->name('user.deposit.check-status');
 
         // Withdrawals (Earning Wallet)
         Route::get('/withdrawal', [WithdrawalController::class, 'index'])->name('user.withdrawal.index');

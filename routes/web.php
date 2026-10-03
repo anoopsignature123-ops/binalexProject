@@ -16,6 +16,9 @@ Route::get('/login', function () {
 
 Route::get('/sponsor-lookup/{code}', [AuthController::class, 'lookupSponsor'])->name('sponsor.lookup');
 
+// OxaPay Payment Gateway Webhook Callback
+Route::post('/payment/oxapay/callback', [\App\Http\Controllers\User\DepositController::class, 'oxapayCallback'])->name('oxapay.callback');
+
 require __DIR__.'/admin.php';
 require __DIR__.'/user.php';
 

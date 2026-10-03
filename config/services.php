@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'oxapay' => [
+        'merchant_key' => env('PAYMENT_GATEWAY_API_KEY'),
+    ],
+
 ];

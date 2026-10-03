@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias(['role' => RoleMiddleware::class]);
 
+        $middleware->validateCsrfTokens(except: [
+            'payment/oxapay/callback',
+        ]);
+
         $middleware->redirectGuestsTo(function (Request $request) {
             if ($request->is('admin') || $request->is('admin/*')) {
                 abort(404);
