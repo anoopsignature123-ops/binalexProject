@@ -21,6 +21,9 @@ Route::prefix('admin')->group(function (): void {
     Route::middleware(['auth', 'role:admin'])->group(function (): void {
         Route::get('/', [DashboardController::class, 'index']);
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::post('/process-daily-roi', [DashboardController::class, 'processRoi'])->name('admin.process-roi');
+        Route::post('/process-awards', [DashboardController::class, 'processAwards'])->name('admin.process-awards');
+        Route::post('/process-all-crons', [DashboardController::class, 'processAllCrons'])->name('admin.process-all-crons');
         Route::get('/global-search', [GlobalSearchController::class, 'search'])->name('admin.global-search');
 
         // Packages Management
@@ -31,9 +34,19 @@ Route::prefix('admin')->group(function (): void {
         Route::put('/deposits/{deposit}', [DepositController::class, 'update'])->name('admin.deposits.update');
         Route::post('/deposits/credit', [DepositController::class, 'creditUser'])->name('admin.deposits.credit');
 
-        // Withdrawals Management
-        Route::get('/withdrawals', [WithdrawalController::class, 'index'])->name('admin.withdrawals.index');
-        Route::put('/withdrawals/{withdrawal}', [WithdrawalController::class, 'update'])->name('admin.withdrawals.update');
+        // Withdrawals Management (Identical to funEarn)
+        Route::controller(WithdrawalController::class)->prefix('withdrawals')->name('admin.withdrawals.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/bulk-approve', 'bulkApprove')->name('bulk-approve');
+            Route::post('/bulk-complete', 'bulkComplete')->name('bulk-complete');
+            Route::get('/{withdrawal}', 'show')->name('show');
+            Route::post('/{withdrawal}/approve', 'approve')->name('approve');
+            Route::post('/{withdrawal}/complete', 'complete')->name('complete');
+            Route::post('/{withdrawal}/pay', 'markAsPaid')->name('pay');
+            Route::match(['post', 'patch'], '/{withdrawal}/update-hash', 'updateHash')->name('update-hash');
+            Route::match(['post', 'patch'], '/{withdrawal}/updateHash', 'updateHash')->name('updateHash');
+            Route::post('/{withdrawal}/reject', 'reject')->name('reject');
+        });
 
         // User Tree, Directs, Impersonate Routes
         Route::get('/users/tree/{user?}', [UserController::class, 'tree'])->name('admin.users.tree');
@@ -57,6 +70,7 @@ Route::prefix('admin')->group(function (): void {
         Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('admin.profile.update-password');
         Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings.index');
         Route::post('/settings/pricing', [SettingController::class, 'updatePricing'])->name('admin.settings.update-pricing');
+        Route::post('/settings/contract', [SettingController::class, 'updateContract'])->name('admin.settings.update-contract');
 
         // Support Tickets Management
         Route::get('/support', [SupportTicketController::class, 'index'])->name('admin.support.index');

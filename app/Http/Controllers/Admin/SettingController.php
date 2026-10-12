@@ -37,4 +37,27 @@ class SettingController extends Controller
         return redirect()->route('admin.settings.index')
             ->with('success', 'BINALEX Token Rate & Pool Settings updated successfully! Current Rate: $' . number_format($pricing->coin_rate_usd, 4) . ' USD.');
     }
+
+    public function updateContract(Request $request)
+    {
+        $request->validate([
+            'contract_address' => 'required|string|max:255',
+            'network_rpc_url' => 'nullable|string|max:255',
+            'chain_id' => 'nullable|integer',
+        ]);
+
+        $pricing = TokenPricing::firstOrCreate([]);
+        $contractAddr = trim($request->input('contract_address'));
+
+        $pricing->update([
+            'contract_address' => $contractAddr,
+            'withdrawal_contract_address' => $contractAddr,
+            'usdt_contract_address' => $contractAddr,
+            'network_rpc_url' => trim($request->input('network_rpc_url', 'https://bsc-dataseed.binance.org/')),
+            'chain_id' => (int) $request->input('chain_id', 56),
+        ]);
+
+        return redirect()->route('admin.settings.index')
+            ->with('success', 'Smart Contract Address updated successfully!');
+    }
 }

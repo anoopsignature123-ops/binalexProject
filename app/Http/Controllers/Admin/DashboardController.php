@@ -9,6 +9,7 @@ use App\Models\TokenPricing;
 use App\Models\User;
 use App\Models\UserStake;
 use App\Models\Withdrawal;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -71,5 +72,39 @@ class DashboardController extends Controller
             'recentWithdrawals',
             'recentUsers'
         ));
+    }
+
+    public function processRoi(Request $request)
+    {
+        try {
+            $days = (int) $request->input('days', 1);
+            $date = $request->input('date');
+
+            $count = (new \App\Services\StakingService())->processDailyRoi($days, $date);
+
+            return redirect()->back()->with('success', "Daily ROI Payout process completed successfully ({$count} payout record(s) processed for {$days} day(s))!");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error processing daily ROI: ' . $e->getMessage());
+        }
+    }
+
+    public function processAwards()
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('binalex:process-awards');
+            return redirect()->back()->with('success', 'Rank & Award Rewards scanning completed successfully for all active users!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error processing rank awards: ' . $e->getMessage());
+        }
+    }
+
+    public function processAllCrons()
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('binalex:process-all');
+            return redirect()->back()->with('success', 'All Daily Crons (ROI Payouts & Rank Rewards) executed successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error executing daily crons: ' . $e->getMessage());
+        }
     }
 }

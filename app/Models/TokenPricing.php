@@ -13,6 +13,11 @@ class TokenPricing extends Model
         'total_pool_usd',
         'total_pool_coins',
         'coin_rate_usd',
+        'contract_address',
+        'withdrawal_contract_address',
+        'usdt_contract_address',
+        'network_rpc_url',
+        'chain_id',
     ];
 
     public function getCoinRateUsdAttribute($value)

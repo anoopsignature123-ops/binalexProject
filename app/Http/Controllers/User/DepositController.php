@@ -154,7 +154,7 @@ class DepositController extends Controller
         }
 
         if ($deposit->status === 'approved' || $deposit->status === 'success') {
-            return response()->json(['status' => 'approved']);
+            return response()->json(['status' => 'approved', 'message' => 'Payment already verified & credited.']);
         }
 
         $apiKey = config('services.oxapay.merchant_key');
@@ -162,6 +162,7 @@ class DepositController extends Controller
             $merchantTxnId = str_replace(['Ref: ', 'TrackId: ', 'GatewayTxn: '], '', $deposit->transaction_hash);
 
             try {
+                // Check payment status with iPaymentWallet (funEarn gateway)
                 $response = Http::timeout(10)->withoutVerifying()->withHeaders([
                     'X-API-Key' => $apiKey,
                     'Content-Type' => 'application/json',
@@ -177,7 +178,7 @@ class DepositController extends Controller
                     if ($confirmed || $status === 'completed' || $status === 'paid' || $status === 'success') {
                         DB::transaction(function () use ($deposit) {
                             $deposit->status = 'approved';
-                            $deposit->admin_note = 'Auto-approved via iPaymentWallet status check';
+                            $deposit->admin_note = 'Auto-approved via Gateway Verification (Ref: ' . $deposit->transaction_hash . ')';
                             $deposit->save();
 
                             $user = $deposit->user;
@@ -187,7 +188,7 @@ class DepositController extends Controller
                             }
                         });
 
-                        return response()->json(['status' => 'approved']);
+                        return response()->json(['status' => 'approved', 'message' => 'Payment confirmed successfully!']);
                     }
                 }
             } catch (\Exception $e) {
@@ -195,7 +196,7 @@ class DepositController extends Controller
             }
         }
 
-        return response()->json(['status' => $deposit->status]);
+        return response()->json(['status' => $deposit->status, 'message' => 'Waiting for payment confirmation...']);
     }
 
     public function oxapayCallback(Request $request)
@@ -221,12 +222,7 @@ class DepositController extends Controller
             return response('Missing OrderId', 400);
         }
 
-        $deposit = Deposit::find($orderId);
-        if (!$deposit) {
-            // try searching by transaction_hash
-            $deposit = Deposit::where('transaction_hash', $orderId)->first();
-        }
-
+        $deposit = Deposit::find($orderId) ?? Deposit::where('transaction_hash', $orderId)->first();
         if (!$deposit) {
             return response('Deposit Not Found', 404);
         }
@@ -236,7 +232,7 @@ class DepositController extends Controller
                 DB::transaction(function () use ($deposit, $txID, $trackId) {
                     $deposit->status = 'approved';
                     $deposit->transaction_hash = $txID ? (string)$txID : ('TrackId: ' . $trackId);
-                    $deposit->admin_note = 'Auto-approved via Payment Gateway Callback';
+                    $deposit->admin_note = 'Auto-approved via Payment Gateway Webhook Callback';
                     $deposit->save();
 
                     $user = $deposit->user;
@@ -261,4 +257,3 @@ class DepositController extends Controller
         return response('ok', 200);
     }
 }
-

@@ -66,6 +66,34 @@
     </form>
 </div>
 
+<!-- Web3 Smart Contract & Withdrawal Settings Card -->
+<div class="card" style="max-width: 650px; margin-top: 1.5rem; background: linear-gradient(145deg, rgba(8, 12, 20, 0.95), rgba(18, 24, 38, 0.98)); border: 1px solid var(--border-gold);">
+    <h3 style="color: var(--gold-light); margin-bottom: 0.5rem; font-size: 1.2rem;"><i class="fa-solid fa-file-contract"></i> Smart Contract Address Settings</h3>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Official Smart Contract address used for Web3 user withdrawals and DApp transactions.</p>
+
+    <form action="{{ route('admin.settings.update-contract') }}" method="POST" data-confirm="Update Smart Contract Address?">
+        @csrf
+        <div style="margin-bottom: 1.2rem;">
+            <label style="font-size: 0.85rem; color: var(--gold-light); font-weight: 700; display: block; margin-bottom: 6px;">Smart Contract Address</label>
+            <input type="text" name="contract_address" value="{{ old('contract_address', $pricing->contract_address ?? $pricing->withdrawal_contract_address ?? '0xd69F8458CeE7381b2D9272a5dB27fa39699bB138') }}" required style="width: 100%; padding: 0.75rem 1rem; background: rgba(8,10,15,0.9); border: 1px solid var(--border-gold); border-radius: 10px; color: var(--gold-light); font-family: monospace; font-size: 0.9rem; font-weight: 700; outline: none;" placeholder="0x...">
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Main Official Smart Contract Address</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Network RPC Provider URL</label>
+                <input type="text" name="network_rpc_url" value="{{ old('network_rpc_url', $pricing->network_rpc_url ?? 'https://bsc-dataseed.binance.org/') }}" style="width: 100%; padding: 0.75rem 1rem; background: rgba(8,10,15,0.7); border: 1px solid var(--border-gold); border-radius: 10px; color: #fff; font-size: 0.85rem; outline: none;">
+            </div>
+            <div>
+                <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Chain ID</label>
+                <input type="number" name="chain_id" value="{{ old('chain_id', $pricing->chain_id ?? 56) }}" style="width: 100%; padding: 0.75rem 1rem; background: rgba(8,10,15,0.7); border: 1px solid var(--border-gold); border-radius: 10px; color: #fff; font-size: 0.85rem; outline: none;">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-gold" style="width: 100%; justify-content: center; padding: 0.85rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none;"><i class="fa-solid fa-floppy-disk"></i> Save Contract Address</button>
+    </form>
+</div>
+
 <script>
     function autoCalculateRate() {
         const usd = parseFloat(document.getElementById('inputPoolUsd').value) || 0;

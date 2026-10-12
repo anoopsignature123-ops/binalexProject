@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
+    @stack('styles')
     <style>
         :root {
             --bg-dark: #07090e;
@@ -1380,5 +1381,6 @@
             if (menu) menu.classList.toggle('show');
         }
     </script>
+    @stack('scripts')
 </body>
 </html>

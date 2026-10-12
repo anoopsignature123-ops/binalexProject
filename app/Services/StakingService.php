@@ -312,48 +312,68 @@ class StakingService
         }
     }
 
-    public function processDailyRoi(): void
+    public function processDailyRoi(int $days = 1, ?string $customDate = null): int
     {
-        $activeStakes = UserStake::where('status', 'active')
-            ->whereHas('user', fn($q) => $q->where('status', 'active'))
-            ->get();
+        $days = max(1, $days);
+        $totalProcessedIncomes = 0;
 
-        foreach ($activeStakes as $stake) {
-            if ($stake->earned_coins >= $stake->total_yield_coins || $stake->days_completed >= $stake->duration_days) {
-                $stake->status = 'completed';
-                $stake->save();
-                continue;
-            }
+        for ($dayIndex = 0; $dayIndex < $days; $dayIndex++) {
+            $currentDate = $customDate 
+                ? \Carbon\Carbon::parse($customDate)->addDays($dayIndex) 
+                : null;
 
-            $payout = (float) $stake->daily_payout_coins;
-            $remaining = (float) $stake->total_yield_coins - (float) $stake->earned_coins;
-            $payout = min($payout, $remaining);
+            $activeStakes = UserStake::where('status', 'active')
+                ->whereHas('user', fn($q) => $q->where('status', 'active'))
+                ->get();
 
-            if ($payout > 0) {
-                DB::transaction(function () use ($stake, $payout) {
-                    $user = $stake->user;
-                    $user->coin_balance += $payout; // Daily ROI goes to ROI Wallet
-                    $user->save();
-
-                    $stake->earned_coins += $payout;
-                    $stake->days_completed += 1;
-
-                    if ($stake->earned_coins >= $stake->total_yield_coins || $stake->days_completed >= $stake->duration_days) {
-                        $stake->status = 'completed';
-                    }
+            foreach ($activeStakes as $stake) {
+                if ($stake->earned_coins >= $stake->total_yield_coins || $stake->days_completed >= $stake->duration_days) {
+                    $stake->status = 'completed';
                     $stake->save();
+                    continue;
+                }
 
-                    Income::create([
-                        'user_id' => $user->id,
-                        'from_user_id' => $user->id,
-                        'stake_id' => $stake->id,
-                        'type' => 'daily_stake',
-                        'amount_coins' => $payout,
-                        'level' => 0,
-                        'description' => "Daily 1% Staking Yield credited for " . $stake->package_name . " ($" . number_format($stake->amount_usd, 2) . " USD) - Day " . $stake->days_completed . " of " . $stake->duration_days . " (" . number_format($payout, 2) . " Coins)",
-                    ]);
-                });
+                $payout = (float) $stake->daily_payout_coins;
+                $remaining = (float) $stake->total_yield_coins - (float) $stake->earned_coins;
+                $payout = min($payout, $remaining);
+
+                if ($payout > 0) {
+                    DB::transaction(function () use ($stake, $payout, $currentDate) {
+                        $user = $stake->user;
+                        $user->coin_balance += $payout; // Daily ROI goes to ROI Wallet
+                        $user->save();
+
+                        $stake->earned_coins += $payout;
+                        $stake->days_completed += 1;
+
+                        if ($stake->earned_coins >= $stake->total_yield_coins || $stake->days_completed >= $stake->duration_days) {
+                            $stake->status = 'completed';
+                        }
+                        $stake->save();
+
+                        $incomeData = [
+                            'user_id' => $user->id,
+                            'from_user_id' => $user->id,
+                            'stake_id' => $stake->id,
+                            'type' => 'daily_stake',
+                            'amount_coins' => $payout,
+                            'level' => 0,
+                            'description' => "Daily 1% Staking Yield credited for " . $stake->package_name . " ($" . number_format($stake->amount_usd, 2) . " USD) - Day " . $stake->days_completed . " of " . $stake->duration_days . " (" . number_format($payout, 2) . " Coins)" . ($currentDate ? " [Backdated: " . $currentDate->format('Y-m-d') . "]" : ""),
+                        ];
+
+                        if ($currentDate) {
+                            $incomeData['created_at'] = $currentDate;
+                            $incomeData['updated_at'] = $currentDate;
+                        }
+
+                        Income::create($incomeData);
+                    });
+
+                    $totalProcessedIncomes++;
+                }
             }
         }
+
+        return $totalProcessedIncomes;
     }
 }
