@@ -33,6 +33,8 @@ Route::prefix('admin')->group(function (): void {
         Route::get('/deposits', [DepositController::class, 'index'])->name('admin.deposits.index');
         Route::put('/deposits/{deposit}', [DepositController::class, 'update'])->name('admin.deposits.update');
         Route::post('/deposits/credit', [DepositController::class, 'creditUser'])->name('admin.deposits.credit');
+        Route::post('/deposits/verify-all-pending', [DepositController::class, 'verifyAllPending'])->name('admin.deposits.verify-all');
+        Route::post('/deposits/{deposit}/verify', [DepositController::class, 'verifyPayment'])->name('admin.deposits.verify');
 
         // Withdrawals Management (Identical to funEarn)
         Route::controller(WithdrawalController::class)->prefix('withdrawals')->name('admin.withdrawals.')->group(function () {

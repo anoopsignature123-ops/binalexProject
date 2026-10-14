@@ -19,10 +19,12 @@ class Deposit extends Model
         'transaction_hash',
         'status',
         'admin_note',
+        'paid_at',
     ];
 
     protected $casts = [
         'amount_usd' => 'decimal:4',
+        'paid_at'    => 'datetime',
     ];
 
     public function user(): BelongsTo
